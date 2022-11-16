@@ -58,7 +58,7 @@ end
 =end
  
 class Game
-  attr_accessor :name, :letter, :count, :board, :num_selection
+  attr_accessor :name, :letter, :count, :board, :player_arr, :player_comb
 
   WINNER_COMBINATIONS = %w[
     012
@@ -111,8 +111,14 @@ class Player < Game
   end
 
   def has_won
-    
+    WINNER_COMBINATIONS.map do |combination|
+      @player_comb = @player_arr.join.to_s
+      if @player_comb.include?(combination.to_s)
+        puts "You win"
+      end
+    end
   end
+
 end
 
 player1 = Player.new
@@ -120,3 +126,4 @@ player1_letter = player1.letter
 player2 = Player.new("unknown", player1_letter)
 player1.play_round
 player1.letter_location
+player1.has_won
