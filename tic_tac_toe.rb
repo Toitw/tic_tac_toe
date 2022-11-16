@@ -58,17 +58,28 @@ end
 =end
  
 class Game
-
-end
-
-class Player < Game
   attr_accessor :name, :letter, :count, :board, :num_selection
+
+  WINNER_COMBINATIONS = %w[
+    012
+    345
+    678
+    036
+    147
+    258
+    048
+    642
+  ]
 
   @@board = [1, 2, 3, 4, 5, 6, 7, 8, 9]
   @@visual_board = "#{@@board[0]} | #{@@board[1]} | #{@@board[2]} \n- * - * - \
   \n#{@@board[3]} | #{@@board[4]} | #{@@board[5]}\n- * - * -\
   \n#{@@board[6]} | #{@@board[7]} | #{@@board[8]}"
   @@count = 0
+  
+end
+
+class Player < Game
 
   def initialize(name="Unknown", letter="Unknown")
     @@count += 1
@@ -87,12 +98,20 @@ class Player < Game
   end
 
   def play_round(num_selection=(0))
-    puts "#{@@visual_board}\n#{@name}, choose a number on the board to place #{@letter}"
+    puts "\n#{@@visual_board}\n#{@name}, choose a number on the board to place #{@letter}"
     @num_selection = gets.chomp.to_i - 1
     @@board[@num_selection] = @letter
-    puts "\n#{@@board[0]} | #{@@board[1]} | #{@@board[2]} \n- * - * - \
-    \n#{@@board[3]} | #{@@board[4]} | #{@@board[5]}\n- * - * -\
-    \n#{@@board[6]} | #{@@board[7]} | #{@@board[8]}"
+  end
+
+  def letter_location
+    @player_arr = []
+    @@board.each_index do |index| 
+      @@board[index] == @letter ? @player_arr.push(index) : "Error"
+    end
+  end
+
+  def has_won
+    
   end
 end
 
@@ -100,3 +119,4 @@ player1 = Player.new
 player1_letter = player1.letter
 player2 = Player.new("unknown", player1_letter)
 player1.play_round
+player1.letter_location
