@@ -1,20 +1,9 @@
 class Board
   attr_reader :board, :visual_board, :game_over
   
-    WINNER_COMBINATIONS = %w[
-      012
-      345
-      678
-      036
-      147
-      258
-      048
-      642
-    ]
-  
     def initialize
     @board = [1, 2, 3, 4, 5, 6, 7, 8, 9]
-    @game_over = false 
+    @game_over = false
     @visual_board =  "#{@board[0]} | #{@board[1]} | #{@board[2]} \n- * - * - \
     \n#{@board[3]} | #{@board[4]} | #{@board[5]}\n- * - * -\
     \n#{@board[6]} | #{@board[7]} | #{@board[8]}"
@@ -23,21 +12,33 @@ class Board
   end
 
   class Player
-    attr_reader :name, :letter
+    attr_reader :name, :letter, :player_arr
 
     def initialize(name, letter)
       @name = name
       @letter = letter
+      @player_arr = []
     end
 
   end
   
   class Game
     attr_accessor :name, :letter, :visual_board, :board, :player1, :player2, :number_choosen, :index_choosen, :round_play, :change_player, :current_player,\
-    :player_selection
+    :player_arr, :game_loop, :game_over
+
+    WINNER_COMBINATIONS = %w[
+      012
+      345
+      678
+      036
+      147
+      258
+      048
+      246
+    ]
   
     def initialize
-      @player_selection = []
+      @game_over = Board.new.game_over
       @current_player = nil
       @number_choosen = nil
       @board = Board.new.board
@@ -70,7 +71,10 @@ class Board
       @index_choosen = @number_choosen - 1
       place_symbol(@index_choosen)
       player_selection(@index_choosen)
-      puts @player_selection
+      @visual_board = @visual_board =  "#{@board[0]} | #{@board[1]} | #{@board[2]} \n- * - * - \
+      \n#{@board[3]} | #{@board[4]} | #{@board[5]}\n- * - * -\
+      \n#{@board[6]} | #{@board[7]} | #{@board[8]}"
+      game_over
       change_player
     end
 
@@ -79,13 +83,25 @@ class Board
     end
 
     def player_selection(index)
-      @player_selection.push(index)
+      @current_player.player_arr.push(index)
+    end
+
+    def game_loop
+      while @game_over == false do
+        round_play
+      end
     end
 
     def game_over 
+      WINNER_COMBINATIONS.map do |combination|
+        if @current_player.player_arr.join.to_s.include? (combination.to_s)
+          puts "Congratulations #{@current_player.name} you win!!"
+          @game_over = true
+        end
+      end
     end
   end
   
   new_board = Board.new
   new_game = Game.new
-  new_game.round_play
+  new_game.game_loop
