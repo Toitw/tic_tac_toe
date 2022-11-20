@@ -26,16 +26,7 @@ class Board
     attr_accessor :name, :letter, :visual_board, :board, :player1, :player2, :number_choosen, :index_choosen, :round_play, :change_player, :current_player,\
     :player_arr, :game_loop, :game_over
 
-    WINNER_COMBINATIONS = %w[
-      012
-      345
-      678
-      036
-      147
-      258
-      048
-      246
-    ]
+    WINNER_COMBINATIONS = [[0,1,2], [3,4,5], [6,7,8], [0,3,6], [1,4,7], [2,5,8], [0,4,8], [2,4,6]]
   
     def initialize
       @game_over = Board.new.game_over
@@ -94,11 +85,20 @@ class Board
 
     def game_over 
       WINNER_COMBINATIONS.map do |combination|
-        if @current_player.player_arr.join.to_s.include? (combination.to_s)
-          puts "Congratulations #{@current_player.name} you win!!"
-          @game_over = true
+        p combination
+        p @current_player.player_arr
+          if (combination - @current_player.player_arr).empty?
+            puts "Congratulations #{@current_player.name} you win!!"
+            @game_over = true
         end
       end
+    end
+
+    def convert_to_array
+      new_winner_comb = WINNER_COMBINATIONS[0].split("")
+      puts new_winner_comb.is_a?(Array)
+      puts new_winner_comb
+      puts
     end
   end
   
