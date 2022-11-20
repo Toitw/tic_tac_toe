@@ -27,8 +27,11 @@ class Board
     :player_arr, :game_loop, :game_over
 
     WINNER_COMBINATIONS = [[0,1,2], [3,4,5], [6,7,8], [0,3,6], [1,4,7], [2,5,8], [0,4,8], [2,4,6]]
+
+    @@booked_array = []
   
     def initialize
+      @index_arr = []
       @game_over = Board.new.game_over
       @current_player = nil
       @number_choosen = nil
@@ -58,15 +61,26 @@ class Board
     def round_play
       puts @visual_board
       puts "#{@current_player.name} it's your turn, pick a number from the board"
-      @number_choosen = gets.chomp.to_i
-      @index_choosen = @number_choosen - 1
-      place_symbol(@index_choosen)
-      player_selection(@index_choosen)
+      pick_number
       @visual_board = @visual_board =  "#{@board[0]} | #{@board[1]} | #{@board[2]} \n- * - * - \
       \n#{@board[3]} | #{@board[4]} | #{@board[5]}\n- * - * -\
       \n#{@board[6]} | #{@board[7]} | #{@board[8]}"
       game_over
       change_player
+    end
+
+    def pick_number
+      @number_choosen = gets.chomp.to_i
+      @index_choosen = @number_choosen - 1
+      @index_arr = @index_arr.push(@index_choosen)
+      if (@index_arr - @@booked_array).empty?
+        puts "That number is choosen! Pick another one"
+        pick_number
+      else
+        @@booked_array.push(@index_choosen)
+        place_symbol(@index_choosen)
+        player_selection(@index_choosen)
+      end
     end
 
     def place_symbol(index)
@@ -85,8 +99,6 @@ class Board
 
     def game_over 
       WINNER_COMBINATIONS.map do |combination|
-        p combination
-        p @current_player.player_arr
           if (combination - @current_player.player_arr).empty?
             puts "Congratulations #{@current_player.name} you win!!"
             @game_over = true
