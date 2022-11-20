@@ -33,6 +33,7 @@ class Board
     @@booked_array = []
   
     def initialize
+      @play_again = ""
       @string_number_choosen = ""
       @index_arr = []
       @game_over = Board.new.game_over
@@ -40,13 +41,15 @@ class Board
       @number_choosen = nil
       @board = Board.new.board
       @visual_board = Board.new.visual_board
+    end
+
+    def create_players
       puts "\nHello player 1, What is your name?"
       @player1 = Player.new(gets.chomp, "X")
       puts "\nWelcome #{@player1.name}, you play with X"
       puts "\nHello player 2, What is your name?"
       @player2 = Player.new(gets.chomp, "O")
       puts "\nWelcome #{@player2.name}, you play with O"
-      initial_player
     end
 
     def explain_game
@@ -101,10 +104,13 @@ class Board
     end
 
     def game_loop
+      create_players
+      initial_player
       while @game_over == false do
         puts @visual_board
         round_play
       end
+      play_again
     end
 
     def game_over 
@@ -132,12 +138,12 @@ class Board
       puts
     end
 
-  end
-  
-  def play_again
-    puts "Would you like to play again? Press 'Y' for Yes or any other key to finish"
-    play_again = gets.chomp
-    play_again == "Y" ?  : "Thank you for playing"
+    def play_again
+      puts "\nWould you like to play again? Press 'Y' for Yes or any other key to finish"
+      @play_again = gets.chomp
+      @play_again == "Y" ? game_loop : "Thank you for playing"
+    end
+
   end
 
   new_board = Board.new
