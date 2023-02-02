@@ -45,10 +45,10 @@ class Board
 
     def create_players
       puts "\nHello player 1, What is your name?"
-      @player1 = Player.new(gets.chomp, "X")
+      @player1 = Player.new(gets.chomp, letter = "X")
       puts "\nWelcome #{@player1.name}, you play with X"
       puts "\nHello player 2, What is your name?"
-      @player2 = Player.new(gets.chomp, "O")
+      @player2 = Player.new(gets.chomp, letter = "O")
       puts "\nWelcome #{@player2.name}, you play with O"
     end
 
@@ -146,7 +146,7 @@ class Board
 
   end
 
-  new_board = Board.new
-  new_game = Game.new
-  new_game.game_loop
+  #new_board = Board.new
+  #new_game = Game.new
+   #new_game.game_loop
 
